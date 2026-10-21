@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubra: Você está perdendo dinheiro na obra?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+
+        :root {
+            --primary: #0f2c5c;
+            --primary-light: #1e4aa8;
+            --accent: #f0b429;
+            --accent-hover: #d89a00;
+            --bg: #0f172a;
+            --text-dark: #334155;
+            --success: #059669;
+            --danger: #dc2626;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        body { 
+            /* Fundo com imagem de obra real */
+            background-image: url('https://images.unsplash.com/photo-1541888086925-ebbcbfddb465?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Filtro escuro para a imagem não atrapalhar a leitura */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.88);
+            z-index: -1;
+        }
+
+        .quiz-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 650px;
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            overflow: hidden;
+            position: relative;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cabeçalho */
+        .quiz-header {
+            background-image: linear-gradient(to bottom, rgba(15, 44, 92, 0.9), rgba(15, 44, 92, 1)), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 40px 30px 30px;
+            text-align: center;
+            border-bottom: 6px solid var(--accent);
+        }
+        .quiz-header h1 { font-size: 26px; font-weight: 900; margin-bottom: 10px; }
+        .quiz-header p { font-size: 15px; opacity: 0.9; font-weight: 600; }
+        .logo-icon { font-size: 50px; margin-bottom: 15px; display: block; }
+
+        /* Tela Inicial (Vendas) */
+        .sales-screen { padding: 40px 30px; text-align: center; }
+        .sales-screen h2 { color: var(--primary); font-size: 22px; margin-bottom: 15px; font-weight: 800; }
+        .sales-screen p { font-size: 16px; color: #475569; margin-bottom: 30px; line-height: 1.6; }
+        
+        .btn-start {
+            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+            color: #1a1400;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(240, 180, 41, 0.4);
+            transition: 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+        }
+        .btn-start:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(240, 180, 41, 0.6); }
+
+        /* Quiz */
+        .quiz-content { padding: 30px; display: none; }
+        
+        .progress-container { width: 100%; background: #e2e8f0; height: 8px; }
+        .progress-bar { height: 8px; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+        
+        .question-count { font-size: 12px; font-weight: 900; color: var(--primary-light); text-transform: uppercase; margin-bottom: 10px; }
+        .question-text { font-size: 20px; font-weight: 800; margin-bottom: 25px; color: #1e293b; line-height: 1.4; }
+
+        .options-container { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn {
+            background: #f8fafc; border: 2px solid #e2e8f0;
+            padding: 16px 20px; border-radius: 12px;
+            font-size: 15px; font-weight: 600; color: var(--text-dark);
+            text-align: left; cursor: pointer; transition: all 0.2s;
+        }
+        .option-btn:hover { border-color: var(--primary-light); background: #e0f2fe; transform: translateX(5px); }
+
+        /* Resultado Final / Venda */
+        .result-screen { display: none; text-align: center; padding: 30px; }
+        .result-screen h2 { color: var(--primary); font-size: 26px; margin-bottom: 20px; font-weight: 900; }
+        
+        .score-circle {
+            width: 130px; height: 130px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; display: flex; justify-content: center; align-items: center;
+            font-size: 40px; font-weight: 900; margin: 0 auto 20px;
+            box-shadow: 0 10px 20px rgba(15, 44, 92, 0.3);
+            border: 5px solid var(--accent);
+        }
+        
+        .result-message { font-size: 16px; margin-bottom: 25px; font-weight: 600; line-height: 1.6; color: #475569; }
+        
+        /* Caixa de Compra */
+        .offer-box {
+            background: #fffbeb; border: 2px dashed var(--accent);
+            border-radius: 16px; padding: 25px; margin-top: 20px; text-align: center;
+        }
+        .offer-box h3 { color: var(--primary); font-size: 22px; margin-bottom: 10px; font-weight: 900;}
+        .offer-box p { font-size: 14px; margin-bottom: 15px; }
+        
+        .btn-buy {
+            display: inline-block; background: linear-gradient(135deg, #059669, #047857); color: white;
+            padding: 18px 30px; border-radius: 50px; text-decoration: none; font-weight: 900;
+            font-size: 18px; box-shadow: 0 10px 25px rgba(5, 150, 105, 0.4); transition: 0.3s;
+            text-transform: uppercase; width: 100%;
+        }
+        .btn-buy:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(5, 150, 105, 0.6); }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <span class="logo-icon">📉</span>
+            <h1>Você está perdendo dinheiro nas obras?</h1>
+            <p>Descubra em 1 minuto como anda a sua gestão.</p>
+        </div>
+
+        <!-- TELA INICIAL -->
+        <div class="sales-screen" id="salesScreen">
+            <h2>Faça o teste rápido e descubra!</h2>
+            <p>Responda 4 perguntas simples sobre a sua rotina de orçamentos e cálculos de obra. No final, você vai descobrir se está na hora de usar uma ferramenta profissional.</p>
+            <button class="btn-start" onclick="startQuiz()">Descobrir Agora (Grátis)</button>
+        </div>
+
+        <!-- QUIZ -->
+        <div class="quiz-content" id="quizContent">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <br>
+            <div class="question-count" id="questionCount">Pergunta 1 de 4</div>
+            <div class="question-text" id="questionText"></div>
+            
+            <div class="options-container" id="optionsContainer"></div>
+        </div>
+
+        <!-- RESULTADO E OFERTA -->
+        <div class="result-screen" id="resultScreen">
+            <h2 id="resultTitle">Resultado do Teste</h2>
+            <div class="score-circle" id="scoreDisplay">0</div>
+            <p class="result-message" id="resultMessage"></p>
+            
+            <!-- OFERTA COM LINK DO SEU SITE -->
+            <div class="offer-box">
+                <h3>Não perca mais dinheiro!</h3>
+                <p>O <strong>ConstrU Calc Pro v11</strong> resolve todos esses problemas para você em segundos.</p>
+                <a href="https://construcalc-pro.netlify.app/" target="_blank" class="btn-buy">Quero Acessar a Calculadora!</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // As perguntas focadas em vendas e na dor do cliente
+        const questions = [
+            {
+                question: "Quanto tempo você leva para fazer um orçamento completo de mão de obra e materiais?",
+                options: [
+                    { text: "Dias ou horas, usando papel e calculadora comum.", score: 2 },
+                    { text: "Cerca de 1 hora, usando planilhas antigas do Excel.", score: 1 },
+                    { text: "Minutos, pois uso um sistema ou calculadora específica.", score: 0 }
+                ]
+            },
+            {
+                question: "Como você calcula o financiamento de um imóvel (PRICE ou SAC) para o seu cliente?",
+                options: [
+                    { text: "Peço para o banco fazer a simulação.", score: 1 },
+                    { text: "Uso uma calculadora HP-12C física ou planilha complexa.", score: 1 },
+                    { text: "Tenho preguiça ou medo de errar os juros.", score: 2 }
+                ]
+            },
+            {
+                question: "Você já perdeu dinheiro comprando tijolo ou cimento a mais (ou a menos) por erro de cálculo?",
+                options: [
+                    { text: "Sim, sempre sobra ou falta material na obra.", score: 2 },
+                    { text: "Às vezes, mas tento arredondar para cima.", score: 1 },
+                    { text: "Nunca, meu cálculo de materiais é exato.", score: 0 }
+                ]
+            },
+            {
+                question: "Seu cliente já pediu um orçamento por escrito e você não tinha um modelo profissional na hora?",
+                options: [
+                    { text: "Sim, perdi a venda porque não passei segurança.", score: 2 },
+                    { text: "Já passei no papel de pão ou rabisco.", score: 1 },
+                    { text: "Sempre entrego um PDF bonito e detalhado.", score: 0 }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let totalScore = 0;
+
+        const salesScreen = document.getElementById('salesScreen');
+        const quizContent = document.getElementById('quizContent');
+        const resultScreen = document.getElementById('resultScreen');
+        const progressBar = document.getElementById('progressBar');
+        
+        const questionCountEl = document.getElementById('questionCount');
+        const questionTextEl = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const resultMessage = document.getElementById('resultMessage');
+        const resultTitle = document.getElementById('resultTitle');
+
+        function startQuiz() {
+            salesScreen.style.display = 'none';
+            quizContent.style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            questionCountEl.innerText = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+            questionTextEl.innerText = q.question;
+            
+            optionsContainer.innerHTML = '';
+
+            // Atualiza a barra
+            const progressPercent = ((currentQuestion) / questions.length) * 100;
+            progressBar.style.width = `${progressPercent}%`;
+
+            q.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => selectOption(opt.score);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(score) {
+            totalScore += score;
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            quizContent.style.display = 'none';
+            resultScreen.style.display = 'block';
+            progressBar.style.width = '100%';
+            
+            // Lógica do resultado
+            if (totalScore >= 5) {
+                // MUITO RUIM
+                scoreDisplay.innerText = "😰";
+                resultTitle.innerText = "Alerta Vermelho!";
+                resultMessage.innerText = "Você está perdendo tempo e dinheiro na sua gestão de obras. Erros de cálculo, planilhas antigas e falta de agilidade estão custando caro para você!";
+            } else if (totalScore >= 2) {
+                // MAIS OU MENOS
+                scoreDisplay.innerText = "🤔";
+                resultTitle.innerText = "Dá pra melhorar!";
+                resultMessage.innerText = "Você se vira bem, mas ainda perde muito tempo fazendo cálculos manuais. Já pensou em fazer tudo isso em 3 cliques e entregar um PDF pro seu cliente?";
+            } else {
+                // BOM
+                scoreDisplay.innerText = "🚀";
+                resultTitle.innerText = "Você está no caminho certo!";
+                resultMessage.innerText = "Você já tem um bom controle, mas pode ficar ainda mais rápido e profissional com as ferramentas certas. Já conhece o ConstrU Calc Pro?";
+            }
+        }
+    </script>
+</body>
+</html>
