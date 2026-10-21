@@ -20,7 +20,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         
         body { 
-            /* Fundo com imagem de obra real */
             background-image: url('https://images.unsplash.com/photo-1541888086925-ebbcbfddb465?q=80&w=1920&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -33,7 +32,6 @@
             padding: 20px;
         }
 
-        /* Filtro escuro para a imagem não atrapalhar a leitura */
         body::before {
             content: '';
             position: fixed;
@@ -58,7 +56,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Cabeçalho */
         .quiz-header {
             background-image: linear-gradient(to bottom, rgba(15, 44, 92, 0.9), rgba(15, 44, 92, 1)), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop');
             background-size: cover;
@@ -72,7 +69,6 @@
         .quiz-header p { font-size: 15px; opacity: 0.9; font-weight: 600; }
         .logo-icon { font-size: 50px; margin-bottom: 15px; display: block; }
 
-        /* Tela Inicial (Vendas) */
         .sales-screen { padding: 40px 30px; text-align: center; }
         .sales-screen h2 { color: var(--primary); font-size: 22px; margin-bottom: 15px; font-weight: 800; }
         .sales-screen p { font-size: 16px; color: #475569; margin-bottom: 30px; line-height: 1.6; }
@@ -93,7 +89,6 @@
         }
         .btn-start:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(240, 180, 41, 0.6); }
 
-        /* Quiz */
         .quiz-content { padding: 30px; display: none; }
         
         .progress-container { width: 100%; background: #e2e8f0; height: 8px; }
@@ -111,7 +106,6 @@
         }
         .option-btn:hover { border-color: var(--primary-light); background: #e0f2fe; transform: translateX(5px); }
 
-        /* Resultado Final / Venda */
         .result-screen { display: none; text-align: center; padding: 30px; }
         .result-screen h2 { color: var(--primary); font-size: 26px; margin-bottom: 20px; font-weight: 900; }
         
@@ -126,7 +120,6 @@
         
         .result-message { font-size: 16px; margin-bottom: 25px; font-weight: 600; line-height: 1.6; color: #475569; }
         
-        /* Caixa de Compra */
         .offer-box {
             background: #fffbeb; border: 2px dashed var(--accent);
             border-radius: 16px; padding: 25px; margin-top: 20px; text-align: center;
@@ -152,14 +145,12 @@
             <p>Descubra em 1 minuto como anda a sua gestão.</p>
         </div>
 
-        <!-- TELA INICIAL -->
         <div class="sales-screen" id="salesScreen">
             <h2>Faça o teste rápido e descubra!</h2>
             <p>Responda 4 perguntas simples sobre a sua rotina de orçamentos e cálculos de obra. No final, você vai descobrir se está na hora de usar uma ferramenta profissional.</p>
             <button class="btn-start" onclick="startQuiz()">Descobrir Agora (Grátis)</button>
         </div>
 
-        <!-- QUIZ -->
         <div class="quiz-content" id="quizContent">
             <div class="progress-container">
                 <div class="progress-bar" id="progressBar"></div>
@@ -171,23 +162,20 @@
             <div class="options-container" id="optionsContainer"></div>
         </div>
 
-        <!-- RESULTADO E OFERTA -->
         <div class="result-screen" id="resultScreen">
             <h2 id="resultTitle">Resultado do Teste</h2>
             <div class="score-circle" id="scoreDisplay">0</div>
             <p class="result-message" id="resultMessage"></p>
             
-            <!-- OFERTA COM LINK DO SEU SITE -->
             <div class="offer-box">
                 <h3>Não perca mais dinheiro!</h3>
                 <p>O <strong>ConstrU Calc Pro v11</strong> resolve todos esses problemas para você em segundos.</p>
-                <a href="https://construcalc-pro.netlify.app/" target="_blank" class="btn-buy">Quero Acessar a Calculadora!</a>
+                <a href="https://pay.kiwify.com.br/LXDtI8T" target="_blank" class="btn-buy">Quero Acessar a Calculadora!</a>
             </div>
         </div>
     </div>
 
     <script>
-        // As perguntas focadas em vendas e na dor do cliente
         const questions = [
             {
                 question: "Quanto tempo você leva para fazer um orçamento completo de mão de obra e materiais?",
@@ -252,7 +240,6 @@
             
             optionsContainer.innerHTML = '';
 
-            // Atualiza a barra
             const progressPercent = ((currentQuestion) / questions.length) * 100;
             progressBar.style.width = `${progressPercent}%`;
 
@@ -281,19 +268,15 @@
             resultScreen.style.display = 'block';
             progressBar.style.width = '100%';
             
-            // Lógica do resultado
             if (totalScore >= 5) {
-                // MUITO RUIM
                 scoreDisplay.innerText = "😰";
                 resultTitle.innerText = "Alerta Vermelho!";
                 resultMessage.innerText = "Você está perdendo tempo e dinheiro na sua gestão de obras. Erros de cálculo, planilhas antigas e falta de agilidade estão custando caro para você!";
             } else if (totalScore >= 2) {
-                // MAIS OU MENOS
                 scoreDisplay.innerText = "🤔";
                 resultTitle.innerText = "Dá pra melhorar!";
                 resultMessage.innerText = "Você se vira bem, mas ainda perde muito tempo fazendo cálculos manuais. Já pensou em fazer tudo isso em 3 cliques e entregar um PDF pro seu cliente?";
             } else {
-                // BOM
                 scoreDisplay.innerText = "🚀";
                 resultTitle.innerText = "Você está no caminho certo!";
                 resultMessage.innerText = "Você já tem um bom controle, mas pode ficar ainda mais rápido e profissional com as ferramentas certas. Já conhece o ConstrU Calc Pro?";
